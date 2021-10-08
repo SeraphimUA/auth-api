@@ -26,7 +26,7 @@ namespace Auth2.Api
         {
             return new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.Integer),
                 new Claim(ClaimTypes.Name, user.FullName),
             };
         }
