@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace Auth2.Api
 {
@@ -12,23 +13,55 @@ namespace Auth2.Api
     {
         public UserModel Authenticate(LoginModel model)
         {
-            return model.Username != "admin" || model.Password != "admin"
-                ? null
-                : new UserModel
+            if (model.Username == "admin" && model.Password == "admin")
+                return new UserModel
                 {
                     Id = 15,
                     FirstName = "Kostia",
-                    LastName = "Mick"
+                    LastName = "Mick",
+                    Role = "Admin"
                 };
+
+            if (model.Username == "user1" && model.Password == "kkeerr22")
+                return new UserModel
+                {
+                    Id = 1,
+                    FirstName = "Vlad",
+                    LastName = "Dub",
+                    Role = "User"
+                };
+
+            if (model.Username == "user2" && model.Password == "mmyyll55")
+                return new UserModel
+                {
+                    Id = 2,
+                    FirstName = "Roman",
+                    LastName = "Sokol",
+                    Role = "User"
+                };
+
+            return null;
         }
 
         public List<Claim> CreateClaims(UserModel user)
         {
-            return new List<Claim>
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.Integer),
                 new Claim(ClaimTypes.Name, user.FullName),
             };
+
+            if (user.Role == "Admin")
+            {
+                claims.Add(new Claim("permissions", nameof(PermissionType.AccessAdmin)));
+                claims.Add(new Claim("permissions", nameof(PermissionType.AccessUser)));
+            }
+            else
+            {
+                claims.Add(new Claim("permissions", nameof(PermissionType.AccessUser)));
+            }
+
+            return claims;
         }
 
         public ClaimsPrincipal CreatePrincipal(UserModel user, string authScheme)

@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Auth2.Api.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Auth2.Api.Controllers
 {
@@ -23,6 +20,20 @@ namespace Auth2.Api.Controllers
                 return Ok(username);
             }
             else return Unauthorized();
+        }
+
+        [HttpGet("admin")]
+        [RequirePermission(PermissionType.AccessAdmin)]
+        public IActionResult GetAccessAdmin()
+        {
+            return Ok();
+        }
+
+        [HttpGet("user")]
+        [RequirePermission(PermissionType.AccessUser)]
+        public IActionResult GetAccessUser()
+        {
+            return Ok();
         }
     }
 }

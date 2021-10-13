@@ -14,5 +14,7 @@ namespace Auth2.Api.Models
         public string LastName { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
+
+        public string Role { get; set; }
     }
 }
